@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Card from "./Card";
 
 type Cell = { id: number } | null;
@@ -17,24 +17,35 @@ const HEART_GRID: Cell[][] = [
 
 
 const PhotoPairGame = () => {
-    const [flippedIds, setFlippedIds] = useState<Set<number>>(new Set());
-    const flippedCount = useMemo(() => flippedIds.size, [flippedIds]);
-    const isLocked = flippedCount >= 2;
+    const [opened, setOpened] = useState<number[]>([]);
+    const openedCount = opened.length;
+    const isLocked = openedCount >= 2;
 
     const toggle = (id: number) => {
-        setFlippedIds((prev) => {
-            const next = new Set(prev)
-            if (next.has(id)) next.delete(id)
-            else next.add(id)
-            return next
-        })
-    }
+        setOpened((prev) => {
+            if (prev.includes(id)) return prev.filter((x) => x !== id);
+
+            if (prev.length >= 2) return prev;
+
+            return [...prev, id];
+        });
+    };
+
+    useEffect(() => {
+        if (opened.length !== 2) return;
+
+        const t = setTimeout(() => {
+            setOpened([]);
+        }, 600);
+
+        return () => clearTimeout(t);
+    }, [opened]);
 
   return (
     <section className="w-full max-w-3xl">
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xl font-semibold">Photo Pair Game</h2>
-        <span className="text-sm opacity-70">Flipped: {flippedCount}</span>
+        <span className="text-sm opacity-70">Opened: {openedCount}</span>
       </div>
 
       <div className="mt-4 rounded-3xl border bg-white/10 p-4 shadow-sm backdrop-blur">
@@ -48,9 +59,9 @@ const PhotoPairGame = () => {
                 <Card
                   key={key}
                   id={cell.id}
-                  flipped={flippedIds.has(cell.id)}
+                  flipped={opened.includes(cell.id)}
                   onToggle={toggle}
-                  disabled={isLocked && !flippedIds.has(cell.id)}
+                  disabled={isLocked && !opened.includes(cell.id)}
                 />
               );
             })
