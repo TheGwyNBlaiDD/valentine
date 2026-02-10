@@ -19,6 +19,7 @@ const HEART_GRID: Cell[][] = [
 const PhotoPairGame = () => {
     const [flippedIds, setFlippedIds] = useState<Set<number>>(new Set());
     const flippedCount = useMemo(() => flippedIds.size, [flippedIds]);
+    const isLocked = flippedCount >= 2;
 
     const toggle = (id: number) => {
         setFlippedIds((prev) => {
@@ -49,6 +50,7 @@ const PhotoPairGame = () => {
                   id={cell.id}
                   flipped={flippedIds.has(cell.id)}
                   onToggle={toggle}
+                  disabled={isLocked && !flippedIds.has(cell.id)}
                 />
               );
             })
