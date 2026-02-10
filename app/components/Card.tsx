@@ -2,16 +2,19 @@ import Image from "next/image";
 
 const Card = ({
   id,
-  flipped = true, 
+  flipped,
+  onToggle 
 }: {
   id: number;
   flipped?: boolean;
+  onToggle: (id: number) => void;
 }) => {
   const src = `/game-photos/${id}.avif`;
 
   return (
     <button
       type="button"
+      onClick={() => onToggle(id)}
       className="relative aspect-square w-full [perspective:1000px] hover:scale-[1.02] active:scale-[0.98] transition"
       aria-label={`Card ${id}`}
     >

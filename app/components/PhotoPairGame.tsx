@@ -1,6 +1,6 @@
 "use client";
 
-import { tr } from "framer-motion/client";
+import { useMemo, useState } from "react";
 import Card from "./Card";
 
 type Cell = { id: number } | null;
@@ -17,23 +17,40 @@ const HEART_GRID: Cell[][] = [
 
 
 const PhotoPairGame = () => {
+    const [flippedIds, setFlippedIds] = useState<Set<number>>(new Set());
+    const flippedCount = useMemo(() => flippedIds.size, [flippedIds]);
+
+    const toggle = (id: number) => {
+        setFlippedIds((prev) => {
+            const next = new Set(prev)
+            if (next.has(id)) next.delete(id)
+            else next.add(id)
+            return next
+        })
+    }
+
   return (
     <section className="w-full max-w-3xl">
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xl font-semibold">Photo Pair Game</h2>
-        <span className="text-sm opacity-70">Layout + Card UI</span>
+        <span className="text-sm opacity-70">Flipped: {flippedCount}</span>
       </div>
 
       <div className="mt-4 rounded-3xl border bg-white/10 p-4 shadow-sm backdrop-blur">
-        <div
-          className="grid gap-2"
-          style={{ gridTemplateColumns: "repeat(9, minmax(0, 1fr))" }}
-        >
+        <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(9, minmax(0, 1fr))" }}>
           {HEART_GRID.flatMap((row, r) =>
             row.map((cell, c) => {
               const key = `${r}-${c}`;
               if (!cell) return <div key={key} className="aspect-square" />;
-              return <Card key={key} id={cell.id} flipped={true} />;
+
+              return (
+                <Card
+                  key={key}
+                  id={cell.id}
+                  flipped={flippedIds.has(cell.id)}
+                  onToggle={toggle}
+                />
+              );
             })
           )}
         </div>
