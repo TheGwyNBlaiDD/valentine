@@ -119,7 +119,11 @@ const PhotoPairGame = () => {
     <section className="w-full max-w-3xl">
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xl font-semibold">Photo Pair Game</h2>
-        <span className="text-sm opacity-70">Pairs: {matchedPairs}/{totalPairs}</span>
+        {matchedPairs < totalPairs - 1 && (
+            <span className="text-sm opacity-70">
+                Pairs: {matchedPairs}/{totalPairs}
+            </span>
+        )}
       </div>
 
       <div className="mt-4 rounded-3xl border bg-white/10 p-4 shadow-sm backdrop-blur">
@@ -136,6 +140,7 @@ const PhotoPairGame = () => {
                     <Card
                     key={key}
                     id={cell.id}
+                    pairId={cell.pairId}
                     flipped={isFlipped}
                     onToggle={toggle}
                     disabled={disabled}

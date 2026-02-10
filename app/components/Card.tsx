@@ -2,16 +2,18 @@ import Image from "next/image";
 
 const Card = ({
   id,
+  pairId,
   flipped = false,
   onToggle,
   disabled,
 }: {
   id: number;
+  pairId: number;
   flipped?: boolean;
   onToggle: (id: number) => void;
   disabled: boolean;
 }) => {
-  const src = `/game-photos/${id}.avif`;
+  const src = `/game-photos/${pairId}.avif`;
 
   return (
     <button
@@ -39,7 +41,7 @@ const Card = ({
             [backface-visibility:hidden]
           "
         >
-          <span className="text-2xl">❤️</span>
+          <span className="text-2xl">❤️ {pairId}</span>
         </div>
 
         {/* BACK */}
