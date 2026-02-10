@@ -1,6 +1,7 @@
 "use client";
 
-import CardPlaceholder from "./CardPlaceholder";
+import { tr } from "framer-motion/client";
+import Card from "./Card";
 
 type Cell = { id: number } | null;
 
@@ -20,21 +21,19 @@ const PhotoPairGame = () => {
     <section className="w-full max-w-3xl">
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xl font-semibold">Photo Pair Game</h2>
-        <span className="text-sm opacity-70">Layout only</span>
+        <span className="text-sm opacity-70">Layout + Card UI</span>
       </div>
 
-      <div className="mt-4 rounded-3xl border bg-white/40 p-4 shadow-sm backdrop-blur">
+      <div className="mt-4 rounded-3xl border bg-white/10 p-4 shadow-sm backdrop-blur">
         <div
           className="grid gap-2"
-          style={{
-            gridTemplateColumns: "repeat(9, minmax(0, 1fr))",
-          }}
+          style={{ gridTemplateColumns: "repeat(9, minmax(0, 1fr))" }}
         >
           {HEART_GRID.flatMap((row, r) =>
             row.map((cell, c) => {
               const key = `${r}-${c}`;
               if (!cell) return <div key={key} className="aspect-square" />;
-              return <CardPlaceholder key={key} id={cell.id} />;
+              return <Card key={key} id={cell.id} flipped={true} />;
             })
           )}
         </div>
